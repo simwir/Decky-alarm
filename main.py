@@ -13,6 +13,7 @@ class Plugin:
 
     async def long_running(self):
         await asyncio.sleep(15)
+        # Passing through a bunch of random data, just as an example
         await decky.emit("test_event", "Hello from the backend!", True, 2)
 
     # Asyncio-compatible long-running code, executed in a task when the plugin is loaded
@@ -20,13 +21,26 @@ class Plugin:
         self.loop = asyncio.get_event_loop()
         decky.logger.info("Hello World!")
 
-    # Function called first during the unload process, utilize this to handle your plugin being removed
+    # Function called first during the unload process, utilize this to handle your plugin being stopped, but not
+    # completely removed
     async def _unload(self):
+        decky.logger.info("Goodnight World!")
+        pass
+
+    # Function called after `_unload` during uninstall, utilize this to clean up processes and other remnants of your
+    # plugin that may remain on the system
+    async def _uninstall(self):
         decky.logger.info("Goodbye World!")
         pass
 
     async def start_timer(self):
         self.loop.create_task(self.long_running())
+
+    async def alarm(selv, time: int) -> None:
+        pass
+
+    async def set_alarm(self, time: int) -> None:
+        self.loop.create_task(self.alarm(time))
 
     # Migrations that should be performed before entering `_main()`.
     async def _migration(self):
