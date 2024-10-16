@@ -28,6 +28,8 @@ const add = callable<[first: number, second: number], number>("add");
 // It starts a (python) timer which eventually emits the event 'timer_event'
 const startTimer = callable<[], void>("start_timer");
 
+const testFunction = callable<[], void>("test_function");
+
 function Content() {
   const [result, setResult] = useState<number | undefined>();
 
@@ -38,6 +40,13 @@ function Content() {
 
   return (
     <PanelSection title="Panel Section">
+      <PanelSectionRow>
+        <ButtonItem
+          onClick={() => testFunction()}
+        >
+          {"Call test function"}
+        </ButtonItem>
+      </PanelSectionRow>
       <PanelSectionRow>
         <ButtonItem
           layout="below"
