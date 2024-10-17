@@ -7,7 +7,7 @@ __version__ = '1.0.0'
 import logging
 
 from typing import Any
-import setup
+import test_utils as test_utils
 
 """
 Constants
@@ -176,5 +176,5 @@ async def emit(event: str, *args: Any) -> None:
     Send an event to the frontend.
     """
     logger.info("Emit called")
-    if setup.emit_callback:
-        setup.emit_callback(event, args)
+    if test_utils.emit_callback:
+        test_utils.emit_callback(event, args)

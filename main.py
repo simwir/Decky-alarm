@@ -1,4 +1,5 @@
 import os
+from typing import Self
 
 # The decky plugin module is located at decky-loader/plugin
 # For easy intellisense checkout the decky-loader code repo
@@ -42,6 +43,10 @@ class Alarm:
         self.alarm_time = alarm_time
         self.ringer = ringer
         self.repeat = repeat
+    
+    @classmethod
+    def as_timer(cls, timer_time: datetime.timedelta, ringer: Ringer, repeat: Repeat) -> Self:
+        return cls(datetime.datetime.now() + timer_time, ringer, repeat)
 
     async def start_alarm(self) -> None:
         sleep_time: datetime.timedelta = self.alarm_time - datetime.datetime.now()
@@ -89,6 +94,11 @@ class Plugin:
     async def set_alarm(self, time: str, message: str = None) -> None:
         logger.debug("Setting alarm for %s", time)
         alarm = Alarm(self.time_as_datetime(datetime.time.fromisoformat(time)), NotificationRinger(message), Alarm.Repeat.NO)
+        self.loop.create_task(alarm.start_alarm())
+
+    async def set_timer(self, minutes: int, seconds: int, message: str = None) -> None:
+        logger.debug("Setting timer for %d:%s", minutes, seconds)
+        alarm = Alarm.as_timer(datetime.timedelta(minutes=minutes, seconds=seconds), NotificationRinger(message), Alarm.Repeat.NO)
         self.loop.create_task(alarm.start_alarm())
 
     async def test_function(self) -> None:
