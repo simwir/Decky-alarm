@@ -14,7 +14,7 @@ import {
   // routerHook
 } from "@decky/api"
 import { useState } from "react";
-import { FaShip } from "react-icons/fa";
+import { FaClock, FaShip } from "react-icons/fa";
 
 // import logo from "../assets/logo.png";
 
@@ -28,7 +28,8 @@ const add = callable<[first: number, second: number], number>("add");
 // It starts a (python) timer which eventually emits the event 'timer_event'
 const startTimer = callable<[], void>("start_timer");
 
-const testFunction = callable<[], void>("test_function");
+const setAlarm = callable<[time: String, message: String], void>("set_alarm");
+const setTimer = callable<[minutes: number, seconds: number, message: String], void>("set_timer");
 
 function Content() {
   const [result, setResult] = useState<number | undefined>();
@@ -42,9 +43,26 @@ function Content() {
     <PanelSection title="Panel Section">
       <PanelSectionRow>
         <ButtonItem
-          onClick={() => testFunction()}
+          layout="below"
+          onClick={() => setAlarm("22:00", "22:00 alarm")}
         >
-          {"Call test function"}
+          {"Set alarm for 22:00"}
+        </ButtonItem>
+      </PanelSectionRow>
+      <PanelSectionRow>
+        <ButtonItem
+          layout="below"
+          onClick={() => setTimer(6, 0, "6 minute timer")}
+        >
+          {"Set 6 min timer"}
+        </ButtonItem>
+      </PanelSectionRow>      
+      <PanelSectionRow>
+        <ButtonItem
+          layout="below"
+          onClick={() => setTimer(0, 5, "5 second timer")}
+        >
+          {"Set 5 sec timer"}
         </ButtonItem>
       </PanelSectionRow>
       <PanelSectionRow>
@@ -86,38 +104,32 @@ function Content() {
 };
 
 export default definePlugin(() => {
-  console.log("Template plugin initializing, this is called once on frontend startup")
+  console.log("Decky-alarm initializing")
 
-  // serverApi.routerHook.addRoute("/decky-plugin-test", DeckyPluginRouterTest, {
-  //   exact: true,
-  // });
-
-  // Add an event listener to the "timer_event" event from the backend
-  const listener = addEventListener<[
-    test1: string,
-    test2: boolean,
-    test3: number
-  ]>("timer_event", (test1, test2, test3) => {
-    console.log("Template got timer_event with:", test1, test2, test3)
-    toaster.toast({
-      title: "template got timer_event",
-      body: `${test1}, ${test2}, ${test3}`
-    });
-  });
+  const notificationListener = addEventListener<[message: string]>(
+    "notification_ringer", 
+    (message) => {
+      console.log("notificationRinger with message: ", message);
+      toaster.toast({
+        title: "Alarm",
+        body: message
+      });
+    }
+  )
 
   return {
     // The name shown in various decky menus
-    name: "Test Plugin",
+    name: "Decky alarm",
     // The element displayed at the top of your plugin's menu
-    titleView: <div className={staticClasses.Title}>Decky Example Plugin</div>,
+    titleView: <div className={staticClasses.Title}>Decky alarm</div>,
     // The content of your plugin's menu
     content: <Content />,
     // The icon displayed in the plugin list
-    icon: <FaShip />,
+    icon: <FaClock />,
     // The function triggered when your plugin unloads
     onDismount() {
-      console.log("Unloading")
-      removeEventListener("timer_event", listener);
+      console.log("Decky-alarm unloading")
+      removeEventListener("notification_ringer", notificationListener);
       // serverApi.routerHook.removeRoute("/decky-plugin-test");
     },
   };

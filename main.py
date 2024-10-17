@@ -25,7 +25,7 @@ class NotificationRinger(Ringer):
         self.message = message
 
     async def ring(self) -> None:
-        logger.debug("Notification ringer with message %s is rinning", self.message)
+        logger.info("Notification ringer with message %s is rinning", self.message)
         await decky.emit(self.EVENT_TYPE, self.message)
  
 
@@ -100,7 +100,3 @@ class Plugin:
         logger.debug("Setting timer for %d:%s", minutes, seconds)
         alarm = Alarm.as_timer(datetime.timedelta(minutes=minutes, seconds=seconds), NotificationRinger(message), Alarm.Repeat.NO)
         self.loop.create_task(alarm.start_alarm())
-
-    async def test_function(self) -> None:
-        decky.logger.info("Test function called")
-        await self.set_alarm("22:00", "Bedtime")

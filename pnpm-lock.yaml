@@ -16,8 +16,8 @@ devDependencies:
     specifier: ^1.0.1
     version: 1.0.1
   '@decky/ui':
-    specifier: ^4.7.2
-    version: 4.7.2
+    specifier: ^4.8.1
+    version: 4.8.1
   '@types/react':
     specifier: 18.3.3
     version: 18.3.3
@@ -57,8 +57,8 @@ packages:
       typescript: 5.6.2
     dev: true
 
-  /@decky/ui@4.7.2:
-    resolution: {integrity: sha512-jYXVhbyyupXAcCuFqr7G2qjYVjp8hlMGF8zl8ALv67y0YhikAtfhA2rGUjCuaV3kdo9YrpBh8djRUJXdFPg/Eg==}
+  /@decky/ui@4.8.1:
+    resolution: {integrity: sha512-lM4jdeyHjIbxHWxDBhbk+GQvdIT50p6RW9DC+oWSWXlaNWU/iG+8aUAcnfxygFkTP43EkCgjFASsYTfB55CMXA==}
     dev: true
 
   /@isaacs/cliui@8.0.2:
